@@ -3,21 +3,31 @@
 Module contains the routes to be used for the API.
 """
 
-
 from api.v1.views import app_views
-import json
 from flask import jsonify
 from models import storage
-from models.base_model import Base
+from models.city import City
+from models.place import Place
+from models.review import Review
 from models.state import State
 from models.user import User
-from models.place import Place
-from models.city import City
 from models.amenity import Amenity
-from models.review import Review
+
+classes = {"amenities": Amenity, "cities": City, "places": Place,
+           "reviews": Review, "states": State, "users": User}
 
 
 @app_views.route('/status')
 def app_status():
     """Returns the status code."""
     return jsonify({'status': 'OK'})
+
+
+@app_views.route('/stats')
+def count():
+    """Returns the count of objects from storage."""
+    class_count_dict = {}
+    for name, cls in classes.items():
+        cls_count = storage.count(cls)
+        class_count_dict[name] = cls_count
+    return jsonify(class_count_dict)
