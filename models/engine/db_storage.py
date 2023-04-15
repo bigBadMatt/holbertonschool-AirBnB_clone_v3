@@ -81,21 +81,15 @@ class DBStorage:
         """
         if cls is None or id is None:
             return None
-        key = '{}.{}'.format(cls.__name__, id)
-        if key in self.__objects:
-            return self.__objects[key]
+        obj = self.all(cls)
+        for key, value in obj.items():
+            if obj[key].id == id:
+                return value
         return None
 
     def count(self, cls=None):
         """
         returns the number of objects of class cls
         """
-
-        if cls is None:
-            return len(self.__objects)
-
-        count = 0
-        for key in self.__objects.keys():
-            if key.startswith(cls):
-                count += 1
-        return count
+        obj = self.all(cls)
+        return len(obj.items())
