@@ -79,6 +79,8 @@ class DBStorage:
         """
         returns a single object and None if not found
         """
+        if cls is None or id is None:
+            return None
         key = '{}.{}'.format(cls.__name__, id)
         if self.__objects[key] is not None:
             return self.__objects[key]
