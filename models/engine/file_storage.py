@@ -76,7 +76,7 @@ class FileStorage:
         if cls is None or id is None:
             return None
         key = '{}.{}'.format(str(cls.__name__), id)
-        if self.__objects[key] is not None:
+        if key in self.__objects:
             return self.__objects[key]
         return None
 
